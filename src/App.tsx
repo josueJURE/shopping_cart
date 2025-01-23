@@ -7,12 +7,14 @@ import Store from "./pages/Store";
 import NotFound from "./pages/NotFount";
 import Navbar from "./components/NavBar";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ShoppingCartProvider from "./context/UseShoppingCart";
 
 
 function App() {
   return (
     <>
-      <Navbar />
+    <ShoppingCartProvider>
+    <Navbar />
       <Container className="mb-4 bg-primary" >
         <Routes>
           <Route path="/" element={<Home />} />
@@ -22,6 +24,8 @@ function App() {
           {/* Catch-all route for undefined paths */}
         </Routes>
       </Container>
+    </ShoppingCartProvider>
+     
     </>
   );
 }

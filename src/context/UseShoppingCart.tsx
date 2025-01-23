@@ -1,21 +1,79 @@
-import { createContext, useContext, ReactNode } from "react"
+import { createContext, useContext, ReactNode, useState } from "react"
 
 type ShoppingCartContextProviderProps = {
     children: ReactNode
 }
 
-const ShoppingCartContext = createContext({})
+type ShoppingCartContext = {
+    getItemQuantity: (id: number) => number
+    increaseCartQuantity : (id: number) => void
+    decreaseCartQuantity : (id: number) => void
+    removeFromCard : (id: number) => void
+}
 
-export default function UseShoppingCart() {
+type CartItems = {
+    id: number
+    quantity: number
+}
+
+type CartQuantity = {
+    quantity: number
+}
+
+const ShoppingCartContext = createContext({} as ShoppingCartContext)
+
+export function useShoppingCart() {
     return useContext(ShoppingCartContext)
  
 }
 
 
 
-export function ShoppingCartProvider({children}: ShoppingCartContextProviderProps) {
+export default function ShoppingCartProvider({children}: ShoppingCartContextProviderProps) {
+    const [cartIetms, setCartItems] = useState<CartItems[]>([])
+    const [increase, setIncrease] = useState<CartQuantity>({ quantity: 0 })
+
+    function getItemQuantity(id: number) {
+        return cartIetms.find(item => item.id === id)?.quantity || 0
+    }
+
+    function increaseCartQuantity(id: number) {
+        setCartItems(currentItems => {
+            if (currentItems.find(item => item.id === id) === null) {
+                return [...currentItems, {id, quantity: 1}] // must go over it one more time
+            } else {
+                return currentItems.map(item => {
+                    if (item.id === id) {
+                        return {...item, quantity: item.quantity + 1} // must go over it one more time
+                    } else {
+                        return item
+                    }
+                })
+            }
+        })
+        
+    }
+
+    function decreaseCartQuantity(id: number) {
+        setCartItems(currentItems => {
+            if(currentItems.find(item => item.id === id)?.quantity === 1) {
+                return currentItems.filter(item => item.id !== id)
+            } else {
+                return currentItems.map(item => {
+                    if (item.id === id) {
+                        return {...item, quantity: item.quantity + 1} // must go over it one more time
+                    } else {
+                        return item
+                    }
+                })
+            }
+        })
+
+    }
+
+
     return (
-        <ShoppingCartContext.Provider value={{}}>
+        <ShoppingCartContext.Provider value={{getItemQuantity, increaseCartQuantity, decreaseCartQuantity}}>
             {children}
 
         </ShoppingCartContext.Provider>
