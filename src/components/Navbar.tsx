@@ -1,8 +1,10 @@
 
 import { Container, Nav, Navbar as NavbarBs, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useShoppingCart } from "../context/UseShoppingCart";
 
 export default function Navbar() {
+  const {allItemsInCart} = useShoppingCart()
   return (
     <NavbarBs sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
@@ -32,6 +34,7 @@ export default function Navbar() {
             </svg>
 
             <div
+
               className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
               style={{
                 color: "white",
@@ -43,6 +46,7 @@ export default function Navbar() {
                 transform: "translate(25%, 25%)",
               }}
             >
+              {allItemsInCart()}
          
             </div>
           </Button>
