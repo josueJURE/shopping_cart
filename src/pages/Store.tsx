@@ -1,6 +1,6 @@
 
 import { Col, Row } from "react-bootstrap";
-import storeItems_data from "../data/items.json";
+import data from "../data/items";
 import StoreItem from "../components/StoreItem"
 
 
@@ -9,7 +9,7 @@ export default function Store() {
     <>
     <h1>Store</h1>
     <Row md={2} xs={1} lg={4} className="g-3">
-      {storeItems_data.map(item => {
+      {data.map(item => {
         return <Col key={item.id}>
           <StoreItem {...item}/>
         </Col>
