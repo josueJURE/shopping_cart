@@ -7,15 +7,13 @@ type ShoppingCartContextProviderProps = {
 
 type ShoppingCartContext = {
   openCart: () => void;
-  closeCart: () =>  void;
+  closeCart: () => void;
   getItemQuantity: (id: number) => number;
   increaseCartQuantity: (id: number) => void;
   decreaseCartQuantity: (id: number) => void;
   removeFromCart: (id: number) => void;
-  allItemsInCart: () =>  number;
+  allItemsInCart: () => number;
   cartItems: CartItems[];
- 
-
 };
 
 type CartItems = {
@@ -37,64 +35,60 @@ export default function ShoppingCartProvider({
   children,
 }: ShoppingCartContextProviderProps) {
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [increase, setIncrease] = useState<CartQuantity>({ quantity: 0 });
 
-  console.log(cartItems)
+  console.log(cartItems);
 
   // function openCart() {
   //   setIsOpen((prev) => !prev)
   // }
 
-  const openCart = () =>  setIsOpen(true)
-  const closeCart = () => setIsOpen(false)
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
 
   function getItemQuantity(id: number) {
     return cartItems.find((item) => item.id === id)?.quantity || 0;
   }
 
   function allItemsInCart() {
-    return cartItems.reduce(function(acc, obj) {return acc + obj.quantity}, 0);
+    return cartItems.reduce(function (acc, obj) {
+      return acc + obj.quantity;
+    }, 0);
   }
 
+  // spot the difference between this function and the one below:
+  //   function increaseCartQuantity(id: number) {
+  //     setCartItems((currentItems) => {
+  //       if (currentItems.find((item) => item.id === id) === null) {
+  //         return [...currentItems, { id, quantity: 1 }]; // must go over it one more time
+  //       } else {
+  //         return currentItems.map((item) => {
+  //           if (item.id === id) {
+  //             return { ...item, quantity: item.quantity + 1 }; // must go over it one more time
+  //           } else {
+  //             return item;
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
 
-// spot the difference between this function and the one below:
-//   function increaseCartQuantity(id: number) {
-//     setCartItems((currentItems) => {
-//       if (currentItems.find((item) => item.id === id) === null) {
-//         return [...currentItems, { id, quantity: 1 }]; // must go over it one more time
-//       } else {
-//         return currentItems.map((item) => {
-//           if (item.id === id) {
-//             return { ...item, quantity: item.quantity + 1 }; // must go over it one more time
-//           } else {
-//             return item;
-//           }
-//         });
-//       }
-//     });
-//   }
-
-
-function increaseCartQuantity(id: number) {
-    setCartItems(currItems => {
-      if (currItems.find(item => item.id === id) == null) {
-        return [...currItems, { id, quantity: 1 }]
+  function increaseCartQuantity(id: number) {
+    setCartItems((currItems) => {
+      if (currItems.find((item) => item.id === id) == null) {
+        return [...currItems, { id, quantity: 1 }];
       } else {
-        return currItems.map(item => {
+        return currItems.map((item) => {
           if (item.id === id) {
-            return { ...item, quantity: item.quantity + 1 }
+            return { ...item, quantity: item.quantity + 1 };
           } else {
-            return item
+            return item;
           }
-        })
+        });
       }
-    })
+    });
   }
-
-
-
-  
 
   function decreaseCartQuantity(id: number) {
     setCartItems((currentItems) => {
@@ -138,14 +132,11 @@ function increaseCartQuantity(id: number) {
         allItemsInCart,
         openCart,
         closeCart,
-        cartItems
-        
-
-
+        cartItems,
       }}
     >
       {children}
-      <ShoppingCart isOpen={isOpen}/>
+      <ShoppingCart isOpen={isOpen} />
     </ShoppingCartContext.Provider>
   );
 }
