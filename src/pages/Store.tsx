@@ -10,19 +10,19 @@ type Item = Database["public"]["Tables"]["items"]["Row"];
 export default function Store() {
   const [items, setItems] = useState<Item[]>([]);
   useEffect(() => {
-    async function getTodos() {
+    async function getItems() {
       const { data, error } = await supabase.from("items").select();
 
       if (error) {
         console.log(error);
       }
 
-      if (data?.length) {
+      if (data?.length) { // same as writting data && data.length
         setItems(data);
       }
     }
 
-    getTodos();
+    getItems();
   }, []);
 
   return (

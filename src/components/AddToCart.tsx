@@ -3,7 +3,7 @@
 
 function AddToCart() {
   return (
-    <div>AddToCart</div>
+    <div>AddToCarts</div>
   )
 }
 

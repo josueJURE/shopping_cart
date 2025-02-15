@@ -1,9 +1,9 @@
 import { Card, Button } from "react-bootstrap";
 import formatCurrency from "../utilities/formatCurrency";
-import AddToCart from "./AddToCart";
-import Remove from "./Remove";
 import { useShoppingCart } from "../context/UseShoppingCart";
 import { Database } from "../types/database.types";
+import { supabase } from "../utilities/supabase";
+
 
 type Item = Database["public"]["Tables"]["items"]["Row"];
 
@@ -15,6 +15,20 @@ export default function StoreItem({ id, name, price, image_url }: Item) {
     removeFromCart,
   } = useShoppingCart();
   const quantity = getItemQuantity(id);
+
+  const updateQuantity = async (quantity: number) => {
+    const {error} = await supabase
+    .from("cart_table")
+    .insert([{name: name, price:price, quantity: quantity}])
+
+    console.log("hi")
+
+    if (error) {
+      console.error("Error updating cart:", error.message);
+
+    }
+  }
+
   console.log("cart quantity", quantity);
   return (
     <Card className="h-100">
@@ -36,7 +50,11 @@ export default function StoreItem({ id, name, price, image_url }: Item) {
         </Card.Title>
         <div className="mt-auto">
           {quantity === 0 ? (
-            <Button onClick={() => increaseCartQuantity(id)} className="w-100">
+            <Button onClick={() => {
+              increaseCartQuantity(id);
+              updateQuantity(quantity +1)
+
+            } } className="w-100">
               Add To Cart
             </Button>
           ) : (

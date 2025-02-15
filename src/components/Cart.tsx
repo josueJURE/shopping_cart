@@ -3,6 +3,9 @@ import { Button, Stack } from "react-bootstrap";
 
 import data from "../data/items";
 import formatCurrency from "../utilities/formatCurrency";
+import { supabase } from "../utilities/supabase";
+import { Database } from "../types/database.types";
+import { useState } from "react";
 
 type CartTypesProps = {
   id: number;
@@ -10,6 +13,10 @@ type CartTypesProps = {
 };
 
 export default function Cart({ id, quantity }: CartTypesProps) {
+  const [name, setName] =  useState();
+  const [price, setPrice] = useState();
+  const [image, setImage] = useState();
+  
   const { removeFromCart } = useShoppingCart();
   const item = data.find((i) => i.id === id);
   if (item == null) return null;
@@ -43,4 +50,5 @@ export default function Cart({ id, quantity }: CartTypesProps) {
       </div>
     </Stack>
   );
+
 }
